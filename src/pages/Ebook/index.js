@@ -1,70 +1,93 @@
 import React, { Component } from 'react'
 import './index.scss'
 import Epub from 'epubjs'
-import { CSSTransition } from 'react-transition-group'
+import TitleBar from 'components/TitleBar'
+import MenuBar from 'components/MenuBar'
 
 const DOWNLOAD_URL = '/ebook/2018_Book_AgileProcessesInSoftwareEngine.epub'
 
 export default class Ebook extends Component {
-  constructor () {
+  constructor() {
     super()
 
     this.state = {
-      ifTitleAndMenuShow: false
+      ifTitleAndMenuShow: false,
+      fontSizeList: [
+        { fontSize: 12 },
+        { fontSize: 14 },
+        { fontSize: 16 },
+        { fontSize: 18 },
+        { fontSize: 20 },
+        { fontSize: 22 },
+        { fontSize: 24 }
+      ],
+      defaultFontSize: 16,
+      themeList: [
+        {
+          name: 'default',
+          style: {
+            body: {
+              color: '#000',
+              background: '#fff'
+            }
+          }
+        },
+        {
+          name: 'eye',
+          style: {
+            body: {
+              color: '#000',
+              background: '#ceeaba'
+            }
+          }
+        },
+        {
+          name: 'night',
+          style: {
+            body: {
+              color: '#fff',
+              background: '#000'
+            }
+          }
+        },
+        {
+          name: 'gold',
+          style: {
+            body: {
+              color: '#000',
+              background: 'rgb(241, 236, 226)'
+            }
+          }
+        }
+      ],
+      defaultTheme: 0,
+      // 图书是否处于可用状态
+      bookAvailable: false,
+      navigation: {}
     }
+    this.onRef = this.onRef.bind(this)
     this.prevPage = this.prevPage.bind(this)
     this.nextPage = this.nextPage.bind(this)
     this.toggleTitleAndMenu = this.toggleTitleAndMenu.bind(this)
+    this.setFontSize = this.setFontSize.bind(this)
+    this.setTheme = this.setTheme.bind(this)
   }
 
-  render () {
+  render() {
     return (
       <div className='ebook'>
-        <CSSTransition
-          in={this.state.ifTitleAndMenuShow}
-          timeout={300}
-          classNames='slide-down'
-          unmountOnExit
-        >
-          <div className='title-wrapper'>
-            <div className='left'>
-              <span className='icon icon-back'></span>
-            </div>
-            <div className='right'>
-              <div className='icon-wrapper'>
-                <span className='icon icon-cart'></span>
-              </div>
-              <div className='icon-wrapper'>
-                <span className='icon icon-person'></span>
-              </div>
-              <div className='icon-wrapper'>
-                <span className='icon icon-more'></span>
-              </div>
-            </div>
-          </div>
-        </CSSTransition>
+        <TitleBar ifTitleAndMenuShow={this.state.ifTitleAndMenuShow} />
 
-        <CSSTransition
-          in={this.state.ifTitleAndMenuShow}
-          timeout={300}
-          classNames="slide-up"
-          unmountOnExit
-        >
-          <div className='menu-wrapper'>
-            <div className='icon-wrapper'>
-              <span className='icon icon-menu'></span>
-            </div>
-            <div className='icon-wrapper'>
-              <span className='icon icon-progress'></span>
-            </div>
-            <div className='icon-wrapper'>
-              <span className='icon icon-bright'></span>
-            </div>
-            <div className='icon-wrapper'>
-              <span className='icon icon-a'>A</span>
-            </div>
-          </div>
-        </CSSTransition>
+        <MenuBar
+          ifTitleAndMenuShow={this.state.ifTitleAndMenuShow}
+          fontSizeList={this.state.fontSizeList}
+          defaultFontSize={this.state.defaultFontSize}
+          themeList={this.state.themeList}
+          defaultTheme={this.state.defaultTheme}
+          setFontSize={this.setFontSize}
+          setTheme={this.setTheme}
+          onRef={this.onRef}
+        />
 
         <div className='read-wrapper'>
           <div id='read'></div>
@@ -78,31 +101,57 @@ export default class Ebook extends Component {
     )
   }
 
-  componentDidMount () {
+  // 获取子组件
+  onRef(name, ref) {
+    switch (name) {
+      case 'menuBar':
+        this.menuBar = ref
+        break
+      default:
+        break
+    }
+  }
+
+  componentDidMount() {
     this.showEpub()
   }
 
-  toggleTitleAndMenu () {
+  toggleTitleAndMenu() {
     this.setState({
       ifTitleAndMenuShow: !this.state.ifTitleAndMenuShow
     })
+    this.state.ifTitleAndMenuShow && this.menuBar.hideSetting()
   }
 
-  prevPage () {
+  prevPage() {
     this.rendition && this.rendition.prev()
-    this.state.ifTitleAndMenuShow && this.setState({
-      ifTitleAndMenuShow: false
-    })
   }
 
-  nextPage () {
+  nextPage() {
     this.rendition && this.rendition.next()
-    this.state.ifTitleAndMenuShow && this.setState({
-      ifTitleAndMenuShow: false
+  }
+
+  setTheme(index) {
+    this.themes.select(this.state.themeList[index].name)
+    this.setState({
+      defaultTheme: index
     })
   }
 
-  showEpub () {
+  registerTheme() {
+    this.state.themeList.forEach(theme => {
+      this.themes.register(theme.name, theme.style)
+    })
+  }
+
+  setFontSize(fontSize) {
+    this.themes && this.themes.fontSize(fontSize)
+    this.setState({
+      defaultFontSize: fontSize
+    })
+  }
+
+  showEpub() {
     this.book = new Epub(DOWNLOAD_URL)
     this.rendition = this.book.renderTo('read', {
       width: window.innerWidth,
@@ -111,5 +160,13 @@ export default class Ebook extends Component {
       method: 'default'
     })
     this.rendition.display()
+    // 获取 theme 对象
+    this.themes = this.rendition.themes
+    // 设置默认字体
+    this.setFontSize(this.state.defaultFontSize)
+    // 注册主题
+    this.registerTheme()
+    // 设置默认主题
+    this.setTheme(this.state.defaultTheme)
   }
 }

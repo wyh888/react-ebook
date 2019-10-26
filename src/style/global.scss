@@ -30,7 +30,7 @@ $fontSize: 37.5;
   transition: all .3s linear;
 }
 .slide-up-enter, .slide-up-exit-done {
-  transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, px2rem(108), 0);
 }
 .slide-up-enter-done {
   transform: translate3d(0, 0, 0);
@@ -45,7 +45,7 @@ $fontSize: 37.5;
   transform: translate3d(0, 0, 0);
 }
 .slide-up-exit-active {
-  transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, px2rem(108), 0);
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
