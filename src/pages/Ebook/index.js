@@ -71,6 +71,7 @@ export default class Ebook extends Component {
     this.toggleTitleAndMenu = this.toggleTitleAndMenu.bind(this)
     this.setFontSize = this.setFontSize.bind(this)
     this.setTheme = this.setTheme.bind(this)
+    this.onProgressChange = this.onProgressChange.bind(this)
   }
 
   render() {
@@ -84,6 +85,8 @@ export default class Ebook extends Component {
           defaultFontSize={this.state.defaultFontSize}
           themeList={this.state.themeList}
           defaultTheme={this.state.defaultTheme}
+          bookAvailable={this.state.bookAvailable}
+          onProgressChange={this.onProgressChange}
           setFontSize={this.setFontSize}
           setTheme={this.setTheme}
           onRef={this.onRef}
@@ -151,6 +154,12 @@ export default class Ebook extends Component {
     })
   }
 
+  onProgressChange(progress) {
+    const percentage = progress / 100
+    const location = percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0
+    this.rendition.display(location)
+  }
+
   showEpub() {
     this.book = new Epub(DOWNLOAD_URL)
     this.rendition = this.book.renderTo('read', {
@@ -168,5 +177,20 @@ export default class Ebook extends Component {
     this.registerTheme()
     // 设置默认主题
     this.setTheme(this.state.defaultTheme)
+    // Book对象的钩子函数ready
+    this.book.ready.then(() => {
+      this.setState({
+        navigation: this.book.navigation
+      })
+      // 生成Locations对象
+      return this.book.locations.generate()
+    }).then(result => {
+      // 保存locations对象
+      this.locations = this.book.locations
+      // 标记电子书为解析完毕状态
+      this.setState({
+        bookAvailable: true
+      })
+    })
   }
 }

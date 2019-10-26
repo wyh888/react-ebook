@@ -8,10 +8,13 @@ export default class MenuBar extends Component {
 
     this.state = {
       ifSettingShow: false,
-      showTag: 0
+      showTag: 0,
+      progress: 0
     }
 
     this.showSetting = this.showSetting.bind(this)
+    this.onProgressChange = this.onProgressChange.bind(this)
+    this.onProgressInput = this.onProgressInput.bind(this)
   }
 
   render() {
@@ -66,16 +69,56 @@ export default class MenuBar extends Component {
     } else if (showTag === 1) {
       settingItem = (
         <div className='setting-theme'>
-          {
-            this.props.themeList.map((item, index) => {
-              return (
-                <div className='setting-theme-item' key={index} onClick={() => this.props.setTheme(index)}>
-                  <div className={`preview ${item.style.body.background === '#fff' ? '' : 'no-border'}`} style={{background: item.style.body.background}}></div>
-                  <div className={`text ${index === this.props.defaultTheme ? 'selected' : ''}`}>{item.name}</div>
+          {this.props.themeList.map((item, index) => {
+            return (
+              <div
+                className='setting-theme-item'
+                key={index}
+                onClick={() => this.props.setTheme(index)}
+              >
+                <div
+                  className={`preview ${
+                    item.style.body.background === '#fff' ? '' : 'no-border'
+                  }`}
+                  style={{ background: item.style.body.background }}
+                ></div>
+                <div
+                  className={`text ${
+                    index === this.props.defaultTheme ? 'selected' : ''
+                  }`}
+                >
+                  {item.name}
                 </div>
-              )
-            })
-          }
+              </div>
+            )
+          })}
+        </div>
+      )
+    } else if (showTag === 2) {
+      settingItem = (
+        <div className='setting-progress'>
+          <div className='progress-wrapper'>
+            <input
+              className='progress'
+              type='range'
+              max='100'
+              min='0'
+              step='1'
+              value={this.state.progress}
+              disabled={!this.props.bookAvailable}
+              ref={(input) => this.input = input}
+              onChange={this.onProgressChange}
+              onInput={this.onProgressInput}
+            />
+          </div>
+
+          <div className='text-wrapper'>
+            <span>
+              {this.props.bookAvailable
+                ? this.state.progress + '%'
+                : '加载中...'}
+            </span>
+          </div>
         </div>
       )
     }
@@ -88,9 +131,7 @@ export default class MenuBar extends Component {
           classNames='slide-up'
           unmountOnExit
         >
-          <div className='setting-wrapper'>
-            {settingItem}
-          </div>
+          <div className='setting-wrapper'>{settingItem}</div>
         </CSSTransition>
 
         <CSSTransition
@@ -110,10 +151,16 @@ export default class MenuBar extends Component {
               <span className='icon icon-menu'></span>
             </div>
             <div className='icon-wrapper'>
-              <span className='icon icon-progress'></span>
+              <span
+                className='icon icon-progress'
+                onClick={() => this.showSetting(2)}
+              ></span>
             </div>
             <div className='icon-wrapper'>
-              <span className='icon icon-bright' onClick={() => this.showSetting(1)}></span>
+              <span
+                className='icon icon-bright'
+                onClick={() => this.showSetting(1)}
+              ></span>
             </div>
             <div className='icon-wrapper'>
               <span className='icon icon-a' onClick={() => this.showSetting(0)}>
@@ -128,6 +175,17 @@ export default class MenuBar extends Component {
 
   componentDidMount() {
     this.props.onRef('menuBar', this)
+  }
+
+  onProgressChange(e) {
+    this.props.onProgressChange(e.target.value)
+  }
+
+  onProgressInput(e) {
+    this.setState({
+      progress: e.target.value
+    })
+    this.input.style.backgroundSize = `${e.target.value}% 100%`
   }
 
   showSetting(tag) {
