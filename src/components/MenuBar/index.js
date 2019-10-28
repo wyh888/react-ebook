@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './index.scss'
+import ContentView from 'components/ContentView'
 import { CSSTransition } from 'react-transition-group'
 
 export default class MenuBar extends Component {
@@ -8,11 +9,13 @@ export default class MenuBar extends Component {
 
     this.state = {
       ifSettingShow: false,
+      ifShowContent: false,
       showTag: 0,
       progress: 0
     }
 
     this.showSetting = this.showSetting.bind(this)
+    this.hideContent = this.hideContent.bind(this)
     this.onProgressChange = this.onProgressChange.bind(this)
     this.onProgressInput = this.onProgressInput.bind(this)
   }
@@ -106,7 +109,7 @@ export default class MenuBar extends Component {
               step='1'
               value={this.state.progress}
               disabled={!this.props.bookAvailable}
-              ref={(input) => this.input = input}
+              ref={input => (this.input = input)}
               onChange={this.onProgressChange}
               onInput={this.onProgressInput}
             />
@@ -148,7 +151,10 @@ export default class MenuBar extends Component {
             }`}
           >
             <div className='icon-wrapper'>
-              <span className='icon icon-menu'></span>
+              <span
+                className='icon icon-menu'
+                onClick={() => this.showSetting(3)}
+              ></span>
             </div>
             <div className='icon-wrapper'>
               <span
@@ -168,6 +174,19 @@ export default class MenuBar extends Component {
               </span>
             </div>
           </div>
+        </CSSTransition>
+        <ContentView
+          navigation={this.props.navigation}
+          bookAvailable={this.props.bookAvailable}
+          ifShowContent={this.state.ifShowContent}
+          jumpTo={this.props.jumpTo}
+        />
+        <CSSTransition
+          in={this.state.ifShowContent}
+          timeout={300}
+          classNames='fade'
+        >
+          <div className={`content-mask ${this.state.ifShowContent ? '' : 'hide'}`} onClick={this.hideContent}></div>
         </CSSTransition>
       </div>
     )
@@ -190,8 +209,23 @@ export default class MenuBar extends Component {
 
   showSetting(tag) {
     this.setState({
-      ifSettingShow: true,
       showTag: tag
+    })
+    if (tag === 3) {
+      this.setState({
+        ifSettingShow: false,
+        ifShowContent: true
+      })
+    } else {
+      this.setState({
+        ifSettingShow: true
+      })
+    }
+  }
+
+  hideContent() {
+    this.setState({
+      ifShowContent: false
     })
   }
 

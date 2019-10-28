@@ -4,7 +4,7 @@ import Epub from 'epubjs'
 import TitleBar from 'components/TitleBar'
 import MenuBar from 'components/MenuBar'
 
-const DOWNLOAD_URL = '/ebook/2018_Book_AgileProcessesInSoftwareEngine.epub'
+const DOWNLOAD_URL = '/ebook/book.epub'
 
 export default class Ebook extends Component {
   constructor() {
@@ -72,6 +72,8 @@ export default class Ebook extends Component {
     this.setFontSize = this.setFontSize.bind(this)
     this.setTheme = this.setTheme.bind(this)
     this.onProgressChange = this.onProgressChange.bind(this)
+    this.jumpTo = this.jumpTo.bind(this)
+    this.hideTitleAndMenu = this.hideTitleAndMenu.bind(this)
   }
 
   render() {
@@ -86,9 +88,11 @@ export default class Ebook extends Component {
           themeList={this.state.themeList}
           defaultTheme={this.state.defaultTheme}
           bookAvailable={this.state.bookAvailable}
+          navigation={this.state.navigation}
           onProgressChange={this.onProgressChange}
           setFontSize={this.setFontSize}
           setTheme={this.setTheme}
+          jumpTo={this.jumpTo}
           onRef={this.onRef}
         />
 
@@ -132,6 +136,17 @@ export default class Ebook extends Component {
 
   nextPage() {
     this.rendition && this.rendition.next()
+  }
+
+  jumpTo(href) {
+    this.rendition.display(href)
+    this.hideTitleAndMenu()
+  }
+
+  hideTitleAndMenu() {
+    this.ifTitleAndMenuShow = false
+    this.menuBar.hideSetting()
+    this.menuBar.hideContent()
   }
 
   setTheme(index) {

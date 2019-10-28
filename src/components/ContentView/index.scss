@@ -1,0 +1,34 @@
+@import '../../style/global.scss';
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 102;
+  width: 80%;
+  height: 100%;
+  background: white;
+  .content-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    .content-item {
+      padding: px2rem(20) px2rem(15);
+      border-bottom: px2rem(1) solid #f4f4f4;
+      .text {
+        font-size: px2rem(14);
+        color: #333;
+      }
+    }
+  }
+  .empty {
+    width: 100%;
+    height: 100%;
+    @include center;
+    font-size: px2rem(16);
+    color: #333;
+  }
+  .hide {
+    display: none;
+  }
+}

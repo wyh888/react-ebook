@@ -165,4 +165,19 @@
       }
     }
   }
+
+  .content-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51, .8);
+  }
+
+  .hide {
+    display: none;
+  }
 }
