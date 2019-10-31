@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import './index.scss'
 import { CSSTransition } from 'react-transition-group'
+import { ITitleBarProps } from '../../interfaces/TitleBar'
 
-export default class TitleBar extends Component {
+export default class TitleBar extends Component<ITitleBarProps> {
   render () {
     return (
       <CSSTransition

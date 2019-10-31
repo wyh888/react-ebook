@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component, ChangeEvent } from 'react'
 import './index.scss'
-import ContentView from 'components/ContentView'
+import ContentView from '../ContentView'
 import { CSSTransition } from 'react-transition-group'
+import { IMenuBarProps, IMenuBarState } from '../../interfaces/MenuBar'
 
-export default class MenuBar extends Component {
-  constructor(props) {
+export default class MenuBar extends Component<IMenuBarProps, IMenuBarState> {
+  constructor(props: IMenuBarProps) {
     super(props)
 
     this.state = {
       ifSettingShow: false,
       ifShowContent: false,
       showTag: 0,
-      progress: 0
+      progress: '0'
     }
 
     this.showSetting = this.showSetting.bind(this)
@@ -19,6 +20,8 @@ export default class MenuBar extends Component {
     this.onProgressChange = this.onProgressChange.bind(this)
     this.onProgressInput = this.onProgressInput.bind(this)
   }
+
+  private input: any
 
   render() {
     const fontSizeListLength = this.props.fontSizeList.length
@@ -196,18 +199,18 @@ export default class MenuBar extends Component {
     this.props.onRef('menuBar', this)
   }
 
-  onProgressChange(e) {
+  onProgressChange(e: ChangeEvent<HTMLInputElement>) {
     this.props.onProgressChange(e.target.value)
   }
 
-  onProgressInput(e) {
+  onProgressInput(e: ChangeEvent<HTMLInputElement>) {
     this.setState({
       progress: e.target.value
     })
     this.input.style.backgroundSize = `${e.target.value}% 100%`
   }
 
-  showSetting(tag) {
+  showSetting(tag: number): void {
     this.setState({
       showTag: tag
     })

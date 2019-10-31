@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
 import './index.scss'
 import Epub from 'epubjs'
-import TitleBar from 'components/TitleBar'
-import MenuBar from 'components/MenuBar'
+import TitleBar from '../../components/TitleBar'
+import MenuBar from '../../components/MenuBar'
+import { IEbookState } from '../../interfaces/Ebook'
 
 const DOWNLOAD_URL = '/ebook/book.epub'
 
-export default class Ebook extends Component {
-  constructor() {
-    super()
+export default class Ebook extends Component<{}, IEbookState> {
+  private book: any
+  private rendition: any
+  private themes: any
+  private locations: any
+  private menuBar: any
+
+  
+  constructor(props: object) {
+    super(props)
 
     this.state = {
       ifTitleAndMenuShow: false,
@@ -109,7 +117,7 @@ export default class Ebook extends Component {
   }
 
   // 获取子组件
-  onRef(name, ref) {
+  onRef(name: string, ref: any) {
     switch (name) {
       case 'menuBar':
         this.menuBar = ref
@@ -138,18 +146,20 @@ export default class Ebook extends Component {
     this.rendition && this.rendition.next()
   }
 
-  jumpTo(href) {
+  jumpTo(href: string) {
     this.rendition.display(href)
     this.hideTitleAndMenu()
   }
 
   hideTitleAndMenu() {
-    this.ifTitleAndMenuShow = false
+    this.setState({
+      ifTitleAndMenuShow: false
+    })
     this.menuBar.hideSetting()
     this.menuBar.hideContent()
   }
 
-  setTheme(index) {
+  setTheme(index: number) {
     this.themes.select(this.state.themeList[index].name)
     this.setState({
       defaultTheme: index
@@ -162,15 +172,15 @@ export default class Ebook extends Component {
     })
   }
 
-  setFontSize(fontSize) {
+  setFontSize(fontSize: number) {
     this.themes && this.themes.fontSize(fontSize)
     this.setState({
       defaultFontSize: fontSize
     })
   }
 
-  onProgressChange(progress) {
-    const percentage = progress / 100
+  onProgressChange(progress: string) {
+    const percentage = Number(progress) / 100
     const location = percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0
     this.rendition.display(location)
   }
@@ -199,7 +209,7 @@ export default class Ebook extends Component {
       })
       // 生成Locations对象
       return this.book.locations.generate()
-    }).then(result => {
+    }).then((result: any) => {
       // 保存locations对象
       this.locations = this.book.locations
       // 标记电子书为解析完毕状态
