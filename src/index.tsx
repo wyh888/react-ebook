@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'))
 
 document.addEventListener('DOMContentLoaded', () => {
   const html = document.querySelector('html')!
@@ -10,4 +10,3 @@ document.addEventListener('DOMContentLoaded', () => {
   fontSize = fontSize > 50 ? 50 : fontSize
   html.style.fontSize = fontSize + 'px'
 })
-

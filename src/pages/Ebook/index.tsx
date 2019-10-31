@@ -14,7 +14,6 @@ export default class Ebook extends Component<{}, IEbookState> {
   private locations: any
   private menuBar: any
 
-  
   constructor(props: object) {
     super(props)
 
@@ -181,7 +180,8 @@ export default class Ebook extends Component<{}, IEbookState> {
 
   onProgressChange(progress: string) {
     const percentage = Number(progress) / 100
-    const location = percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0
+    const location =
+      percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0
     this.rendition.display(location)
   }
 
@@ -203,19 +203,21 @@ export default class Ebook extends Component<{}, IEbookState> {
     // 设置默认主题
     this.setTheme(this.state.defaultTheme)
     // Book对象的钩子函数ready
-    this.book.ready.then(() => {
-      this.setState({
-        navigation: this.book.navigation
+    this.book.ready
+      .then(() => {
+        this.setState({
+          navigation: this.book.navigation
+        })
+        // 生成Locations对象
+        return this.book.locations.generate()
       })
-      // 生成Locations对象
-      return this.book.locations.generate()
-    }).then((result: any) => {
-      // 保存locations对象
-      this.locations = this.book.locations
-      // 标记电子书为解析完毕状态
-      this.setState({
-        bookAvailable: true
+      .then((result: any) => {
+        // 保存locations对象
+        this.locations = this.book.locations
+        // 标记电子书为解析完毕状态
+        this.setState({
+          bookAvailable: true
+        })
       })
-    })
   }
 }
