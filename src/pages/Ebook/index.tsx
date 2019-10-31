@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import './index.scss'
 import Epub from 'epubjs'
-import TitleBar from '../../components/TitleBar'
-import MenuBar from '../../components/MenuBar'
-import { IEbookState } from '../../interfaces/Ebook'
+import TitleBar from 'components/TitleBar'
+import MenuBar from 'components/MenuBar'
+import { IEbookState } from 'interfaces/Ebook'
 
 const DOWNLOAD_URL = '/ebook/book.epub'
 

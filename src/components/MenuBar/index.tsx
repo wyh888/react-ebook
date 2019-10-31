@@ -2,7 +2,7 @@ import React, { Component, ChangeEvent } from 'react'
 import './index.scss'
 import ContentView from '../ContentView'
 import { CSSTransition } from 'react-transition-group'
-import { IMenuBarProps, IMenuBarState } from '../../interfaces/MenuBar'
+import { IMenuBarProps, IMenuBarState } from 'interfaces/MenuBar'
 
 export default class MenuBar extends Component<IMenuBarProps, IMenuBarState> {
   constructor(props: IMenuBarProps) {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './index.scss'
 import { CSSTransition } from 'react-transition-group'
-import { IContentViewProps } from '../../interfaces/ContentView'
+import { IContentViewProps } from 'interfaces/ContentView'
 
 export default class ContentView extends Component<IContentViewProps> {
   render() {
