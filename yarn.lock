@@ -1384,13 +1384,6 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/epub@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@types/epub/-/epub-0.0.5.tgz#d951549404b8c541d37d654f507353b01eb05828"
-  integrity sha512-anV5isIKoSK0IzNYseHieALxx2ZcS9Uyqp/jqJOtmQo3DGwtwy2Ab1WPjBz3cojpJ+c2Mou5UyETXE0U0d0ViQ==
-  dependencies:
-    "@types/node" "*"
-
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -3402,9 +3395,9 @@ decamelize@^2.0.0:
     xregexp "4.0.0"
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-equal@^1.0.1:
   version "1.0.1"
